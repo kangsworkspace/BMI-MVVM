@@ -15,14 +15,12 @@
 <br>
 
 ## 📌 학습한 주요 내용
-#### MVC 패턴 처음 적용해보기
+#### MVVM 패턴 적용
 
-아래와 같이 기초적인 단계의 MVC 패턴을 적용해보았습니다.
-![ㅇㅇ](https://github.com/kangsworkspace/BMI-Refectoring/assets/141600830/6edee125-0f6c-4956-b427-1473819b93b6)
 
-#### 파일 분산에 따른 변수 처리
 
-Models 그룹에 있는 BMICalculatorManager파일에서 로직을 처리하였기 때문에 다른 파일간의 데이터가 서로 상호작용 할 수 있도록 코드를 짰습니다.
+#### 의존성 주입
+
 
 
 
@@ -38,5 +36,14 @@ Models 그룹에 있는 BMICalculatorManager파일에서 로직을 처리하였�
 AutoLayOut 설정 겹치는 부분 변수 하나로 관리
 로직이 아니니까 View
 
+애매하게 설정하니 더 분산된 느낌 
+
+양 사이드만 설정
+
+파일을 분리하나?
+
+일단은 static let으로 외부에서 관리...
+깔끔하진 않다.
+프로젝트 규모가 커져봐야 알겠다.
    
 
