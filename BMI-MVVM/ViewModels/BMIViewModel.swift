@@ -35,13 +35,17 @@ class BMIViewModel {
     
     private var bmi: BMI?
     
-    // MARK: - Output
+    // MARK: - Output(데이터 뷰로 전달하기)
     var mainTextString: String {
         return mainText.rawValue
     }
     
     var mainLabelTextColor: UIColor {
         return mainText.textColor
+    }
+    
+    var bmiValueString: String {
+        return String(bmi?.value ?? 0.0)
     }
     
     var bmiAdviceString: String {
@@ -57,6 +61,18 @@ class BMIViewModel {
         self.bmiCalculatorManager = bmiCalculatorManager
     }
     
+    // MARK: - Input(뷰에서 입력받기)
+    func setHeightValue(_ height: String) {
+        self.heightString = height
+    }
+    
+    func setWeightValue(_ weight: String) {
+        self.weightString = weight
+    }
+    
+    
+    
+    // MARK: - 로직
     // BMI 데이터 초기화
     func resetBMI() {
         heightString = ""
@@ -65,4 +81,58 @@ class BMIViewModel {
         bmi = nil
         mainText = .right
     }
+    
+    // 계산 버튼 실행 함수
+    func calculateButtonTapped(fromCurrentVC: UIViewController, animated: Bool) {
+        
+        if self.makeBMIResult() {
+            heightString = ""
+            weightString = ""
+            goToNextVC(fromCurrentVC: fromCurrentVC, animated: true)
+        } else {
+            mainText = .notRight
+        }
+    }
+    
+    // 다시 계산하기 버튼 실행 함수
+    func reCalculateButtonTapped(fromCurrentVC: UIViewController, animated: Bool) {
+        fromCurrentVC.dismiss(animated: true)
+    }
+    
+    
+    // BMI 결과값 만들기
+    func makeBMIResult() -> Bool {
+        
+        do {
+            bmi = try bmiCalculatorManager.calculateBMI(height: self.heightString, weight: self.weightString)
+            return true
+        } catch {
+            let error = error as! CalculateError
+            switch error {
+            case .minusNumberError:
+                print("마이너스 숫자 입력")
+            case .noNumberError:
+                print("숫자가 아닌 글자 입력")
+            default:
+                break
+            }
+            print("BMI 계산 실패")
+            return false
+        }
+    }
+    
+    // 화면 이동 함수
+    func goToNextVC(fromCurrentVC: UIViewController, animated: Bool) {
+
+        // 이동할 창
+        let resultVC = ResultViewController(viewModel: self)
+        
+        // 전체화면으로 설정
+        resultVC.modalPresentationStyle = .fullScreen
+        
+        // resultVC로 이동
+        fromCurrentVC.present(resultVC, animated: animated, completion: nil)
+    }
 }
+
+

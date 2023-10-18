@@ -14,15 +14,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(windowScene: windowScene)
+//        guard let windowScene = (scene as? UIWindowScene) else { return }
+//        window = UIWindow(windowScene: windowScene)
+//        
+//        let calculator = BMICalculatorManager()
+//        let viewModel = BMIViewModel(bmiCalculatorManager: calculator)
+//        
+//        let naviVC = UINavigationController(rootViewController: ViewController(viewModel: viewModel))
+//        
+//        window?.rootViewController = naviVC
+//        window?.makeKeyAndVisible()
         
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+                
         let calculator = BMICalculatorManager()
         let viewModel = BMIViewModel(bmiCalculatorManager: calculator)
         
-        let naviVC = UINavigationController(rootViewController: ViewController(viewModel: viewModel))
-        
-        window?.rootViewController = naviVC
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = ViewController(viewModel: viewModel)
         window?.makeKeyAndVisible()
         
     }

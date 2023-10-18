@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // MARK: -  뷰 모델 사용
     var viewModel: BMIViewModel
     
     init(viewModel: BMIViewModel) {
@@ -51,6 +52,7 @@ class ViewController: UIViewController {
         textField.clipsToBounds = true
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.placeholder = " cm단위로 입력해주세요"
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -82,6 +84,7 @@ class ViewController: UIViewController {
         textField.clipsToBounds = true
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.placeholder = " kg단위로 입력해주세요"
+        textField.keyboardType = .numberPad
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -100,7 +103,8 @@ class ViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 10
-        stackView.spacing = 10
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -132,9 +136,11 @@ class ViewController: UIViewController {
         // 백그라운드 색상 설정
         view.backgroundColor = .lightGray
         
+        
         firstSetup()
     }
     
+    // 데이터 및 인터페이스 초기화
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -144,10 +150,7 @@ class ViewController: UIViewController {
         setupMainText()
     }
         
-    // 다른 창 눌렀을 때 키보드 내리기
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+
     
     // 셋업 - 초기 셋업
     func firstSetup() {
@@ -217,28 +220,67 @@ class ViewController: UIViewController {
     
     func setAddTarget() {
         calculateButton.addTarget(self, action: #selector(calculateButtonTapped), for: .touchUpInside)
-    }
-    
-   
-    @objc func calculateButtonTapped() {
-        print("calculateButtonTapped")
+        heightTextField.addTarget(self, action: #selector(textFieldChanged(_:)), for: .editingChanged)
+        weightTextField.addTarget(self, action: #selector(textFieldChanged(_:)), for: .editingChanged)
     }
     
     func setupMainText() {
         mainLabel.text = viewModel.mainTextString
         mainLabel.textColor = viewModel.mainLabelTextColor
     }
+    
+    @objc func calculateButtonTapped() {
+        
+        // 화면 이동전에 인터페이스 초기화
+        heightTextField.text = ""
+        weightTextField.text = ""
+        
+        // 뷰 모델의 로직 실행
+        viewModel.calculateButtonTapped(fromCurrentVC: self, animated: true)
+        
+        // 메인 텍스트 설정
+        setupMainText()
+    }
+    
+    // 텍스트 필드에 입력받은 값 => 뷰 모델로 전달
+    @objc func textFieldChanged(_ textField: UITextField) {
+        if textField == heightTextField {
+            viewModel.setHeightValue(textField.text ?? "")
+        }
+        if textField == weightTextField {
+            viewModel.setWeightValue(textField.text ?? "")
+        }
+    }
 }
 
 extension ViewController: UITextFieldDelegate {
     
+    // 숫자만 입력받기(텍스트 필드가 입력받을 때 조건 걸기)
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if Int(string) != nil || string == "" {
+            return true
+        }
+        return false
+    }
     
+    // return 키 설정
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if heightTextField.text != "", weightTextField.text != "" {
+            weightTextField.resignFirstResponder()
+            return true
+        } else if heightTextField.text != "" {
+            weightTextField.becomeFirstResponder()
+            return true
+        }
+        return false
+    }
     
-    
-    
-    
-    
-    
-    
+    // 다른 창 눌렀을 때 키보드 내리기
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        heightTextField.resignFirstResponder()
+        weightTextField.resignFirstResponder()
+    }
 }
 
