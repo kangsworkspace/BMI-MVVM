@@ -48,8 +48,6 @@ AutoLayOut을 잡을 때 겹치는 설정을 관리하기 위해 따로 상수 �
 
 <br>
 <br>
-<br>
-
 ViewController에서 ViewModel인 BMIViewModel을 받아오는데 오류가 계속해서 발생하였습니다.
 필수 생성자와 관련된 "init(coder:) has not been implemented" 오류가 발생하여
 생성자와 관련된 코드인줄 알았으나 스토리 보드와 관련된 설정이 남아있어 ViewController의 인스턴스를 생성하다 충돌이 발생한 문제였습니다.
