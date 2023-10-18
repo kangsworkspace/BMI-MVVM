@@ -2,8 +2,9 @@
 
 ## 🖥️ 프로젝트 소개
 
+- 기존에 진행했던 ![BMI를 계산해주는 프로젝트](https://github.com/kangsworkspace/BMI-Refectoring) 를 MVVM 패턴으로 리펙토링 하였습니다.
 - 
-- 
+
 <br>
 
 ## 👀 파일 구성
